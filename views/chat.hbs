@@ -1,0 +1,26 @@
+
+    <div id="chat"></div>
+    <input type="text" id="message" name="message" onkeyup="sent(event)" />
+
+    <script type="text/javascript" src="http://blonde-crystal-8000.codio.io/faye/client.js"></script>
+
+    <script type="text/javascript">
+        var client = new Faye.Client('http://blonde-crystal-8000.codio.io/');
+
+        client.subscribe('/messages', function(message) {
+            var div = document.getElementById('chat');
+            div.innerHTML = div.innerHTML + message.text + '<br/>';
+        });
+
+        function sent(e) {            
+            if (e.keyCode == 13) {
+                message = document.getElementById('message');
+                client.publish('/messages', { 
+                    text: message.value
+                });
+                message.value = '';
+             }
+        }
+
+    </script>
+
